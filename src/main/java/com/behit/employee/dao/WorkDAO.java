@@ -2,6 +2,7 @@ package com.behit.employee.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -40,5 +41,7 @@ public interface WorkDAO {
 	ArrayList<WorkDTO> worksmodal(String emp_id, String modaldate);
 
 	ArrayList<WorkDTO> worktmodal(String emp_id, String modaldate);
+
+	List<String> vacaselect(String workmonth, String login_id);
 
 }

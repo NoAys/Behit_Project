@@ -152,9 +152,15 @@ public class WorkController {
         
         Calendar today = Calendar.getInstance();
         today.setTime(new Date());
+        
 
         // 배열에 평일 추가
         List<String> weekdays = new ArrayList<>();
+       /* 
+        List<String> valuesToRemove = workService.vacaselect(workmonth, login_id);
+        logger.info("valuesToRemove : "+valuesToRemove);
+        
+        weekdays.removeAll(valuesToRemove); */
 
         // 월의 마지막 날짜까지 반복
         int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);   

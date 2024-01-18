@@ -20,6 +20,7 @@ public class WorkDTO {
 	private String work_start_time;
 	private String work_end;
 	private String work_end_time;
+	private String vaca_date;
 	private String vaca_start;
 	private String vaca_end;
 	private String use_hour;

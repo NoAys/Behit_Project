@@ -178,5 +178,11 @@
 		FROM vacation_history vh WHERE vh.emp_id = #{login_id}	 AND vh.doc_code NOT IN ('-')
 		ORDER BY vh.vaca_date;
 	</select>
+	
+	<select id="vacaselect" resultType="List">
+		SELECT DATE_FORMAT(vaca_date, '%d') AS vaca_date
+			FROM vacation_history 
+		WHERE emp_id = #{login_id} AND vaca_date LIKE CONCAT(#{workmonth}, '-%')
+	</select>
 
 </mapper>
