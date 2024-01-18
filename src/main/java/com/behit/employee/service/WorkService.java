@@ -129,6 +129,11 @@ public class WorkService {
 		return workDAO.vacaselect(workmonth, login_id);
 	}
 
+	public boolean vacaChk(String login_id, String workdate) {
+		// TODO Auto-generated method stub
+		return workDAO.vacaChk(login_id, workdate);
+	}
+
 
 
 }

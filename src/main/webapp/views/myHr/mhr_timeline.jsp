@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="../../assets/vendor/libs/select2/select2.css" />
     <link rel="stylesheet" href="../../assets/vendor/libs/quill/editor.css" />
     <link rel="stylesheet" href="../../assets/vendor/libs/@form-validation/umd/styles/index.min.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/sweetalert2/sweetalert2.css" />
 
     <!-- Page CSS -->
 
@@ -227,6 +228,7 @@
     <script src="../../assets/vendor/libs/select2/select2.js"></script>
     <script src="../../assets/vendor/libs/flatpickr/flatpickr.js"></script>
     <script src="../../assets/vendor/libs/moment/moment.js"></script>
+    <script src="../../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
 
     <!-- Main JS -->
     <script src="../../assets/js/main.js"></script>
@@ -238,6 +240,34 @@
     <!-- Header -->
     <script src="../../assets/js/header.js"></script>
     <script>
+    
+    var msg = '${msg}';
+    console.log(msg);
+
+    if (msg != '') {
+        Swal.fire({
+            text: msg,
+            icon: 'success',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        });
+    }
+    
+    var errormsg = '${errormsg}';
+    console.log(errormsg);
+
+    if (errormsg != '') {
+        Swal.fire({
+            text: errormsg,
+            icon: 'error',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        });
+    }
 	var nextcnk = 0;
 	var prevcnk = 0;
 	var minprev = -6;

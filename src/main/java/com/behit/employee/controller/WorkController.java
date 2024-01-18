@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.behit.employee.dto.EmployeeDTO;
 import com.behit.employee.service.WorkService;
@@ -88,7 +89,8 @@ public class WorkController {
 	
 	// 근태관리 날짜 선택
 	@PostMapping(value="/myHr/selectday")
-	public String selectday(@RequestParam String worktime, @RequestParam String workdate, HttpSession session) {
+	public String selectday(@RequestParam String worktime, @RequestParam String workdate, 
+			HttpSession session, RedirectAttributes rAttr) {
 		
 		HashMap<String, Object> commute = new HashMap<String, Object>();
 
@@ -109,13 +111,23 @@ public class WorkController {
 		
 		boolean workChk = workService.workChk(login_id, workdate);
 		
-		logger.info("workChk : "+workChk);
+		boolean vacaChk = workService.vacaChk(login_id, workdate);
 		
-		if (workChk) {
-			workService.updateday(commute);
+		logger.info("workChk : "+workChk);
+		logger.info("vacaChk : "+vacaChk);
+		
+		if (vacaChk) {
+			rAttr.addFlashAttribute("errormsg", "연차를 사용한 날은 수정할 수 없습니다.");
 		} else {
-			workService.selectday(commute);
-		}	
+			if (workChk) {
+				workService.updateday(commute);
+				rAttr.addFlashAttribute("msg", "근무 시간이 수정되었습니다.");
+			} else {
+				workService.selectday(commute);
+				rAttr.addFlashAttribute("msg", "근무 시간이 수정되었습니다.");
+			}	
+		}
+		
 		return "redirect:/myHr/mhr_timeline.go";
 	}
 
@@ -130,7 +142,8 @@ public class WorkController {
 	
 	// 평일 계산
     @PostMapping("/myHr/selectmonth")
-    public String processMonth(@RequestParam String workmonth, @RequestParam String worktime, HttpSession session) {
+    public String processMonth(@RequestParam String workmonth, @RequestParam String worktime, 
+    		HttpSession session, RedirectAttributes rAttr) {
         // Calendar 객체 생성 및 월 설정
     	HashMap<String, Object> commute = new HashMap<String, Object>();
 		EmployeeDTO loginInfo = (EmployeeDTO) session.getAttribute("loginInfo");
@@ -156,12 +169,10 @@ public class WorkController {
 
         // 배열에 평일 추가
         List<String> weekdays = new ArrayList<>();
-       /* 
+        
         List<String> valuesToRemove = workService.vacaselect(workmonth, login_id);
         logger.info("valuesToRemove : "+valuesToRemove);
         
-        weekdays.removeAll(valuesToRemove); */
-
         // 월의 마지막 날짜까지 반복
         int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);   
         
@@ -178,6 +189,15 @@ public class WorkController {
             }
         }
         logger.info("weekdays : "+weekdays);
+        
+        for (String vacaDate : valuesToRemove) {
+        	// 여기에서 날짜 형식이 yyyy-MM-dd라고 가정하고, "-"를 기준으로 나누어 첫 번째 부분(년월일)을 무시하고 두 번째 부분(일)만 추출
+        	String[] dateParts = vacaDate.split("-");
+        	if (dateParts.length >= 3) {
+        		String dayOfMonth = dateParts[2];
+        		weekdays.remove(dayOfMonth);
+        	}
+        }
         
         for (String day : weekdays) {
             String workdate = workmonth+"-"+day;
@@ -197,6 +217,8 @@ public class WorkController {
     			workService.selectday(commute);
     		}
         }
+        
+        rAttr.addFlashAttribute("msg", "근무시간이 변경되었습니다.");
         return "redirect:/myHr/mhr_timeline.go";
     }
 	

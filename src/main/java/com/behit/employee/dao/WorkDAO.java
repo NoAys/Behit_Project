@@ -44,4 +44,6 @@ public interface WorkDAO {
 
 	List<String> vacaselect(String workmonth, String login_id);
 
+	boolean vacaChk(String login_id, String workdate);
+
 }
