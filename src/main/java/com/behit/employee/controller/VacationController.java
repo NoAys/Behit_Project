@@ -24,12 +24,14 @@ public class VacationController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired VacationService vacationService;
-	
+
+	// 연차 리스트 페이지로 이동
 	@GetMapping(value="/employee/vacation_list.go")
 	public String vacalistgo() {
 		return "/employee/vacation_list";
 	}
-	
+
+	// 연차 리스트 출력
 	@PostMapping(value="/employee/vacalist.do")
 	@ResponseBody
 	public HashMap<String, Object> vacalist(@RequestParam String page, HttpSession session) {
@@ -42,12 +44,14 @@ public class VacationController {
 		
 		return vacationService.vacalist(page, login_dept);
 	}
-	
+
+	// 연차 디테일 페이지로 이동동
 	@GetMapping(value="/employee/vacadetail")
 	public ModelAndView vacadetail(@RequestParam String emp_id) {
 		return vacationService.detail(emp_id);
 	}
-	
+
+	// 연차 추가 및 제거 실행
 	@PostMapping(value="/employee/vacaChange.do")
 	public ModelAndView vacaChange(@RequestParam HashMap<String, Object> params, HttpSession session) {
 		
