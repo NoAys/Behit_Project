@@ -40,20 +40,21 @@ public class EmployeeController {
 	@Autowired 
 	UtilService utilService;
 
+	// 직원 리스트 페이지로 이동
 	@GetMapping(value = "/employee/employee_list.go")
 	public String empListGo() {
 		logger.info("직원 리스트 페이지로 이동");
 		return "employee/employee_list";
 	}
-	
 
+	// 직원 등록 페이지로 이동
 	@GetMapping(value = "/employee/employee_add.go")
 	public String empAddGo() {
 		logger.info("직원 등록 페이지로 이동");
 		return "employee/employee_add";
 	}
 
-	// 추후 경로 수정
+	// 직원 등록
 	@PostMapping(value = "/employee/empadd.do")
 	@ResponseBody
 	public HashMap<String, Object> empjoin(@RequestParam HashMap<String, Object> params, HttpSession session, 
@@ -82,7 +83,8 @@ public class EmployeeController {
 			utilService.upload(uploadFile, file);	
 			
 			employeeService.join(params);
-			
+
+			// 직원 등록시 등록한 일 수로 부터 한달간 평일을 계산해 근무시간 09:00 ~ 18:00 으로 자동으로 입력력
 			String hiredateString = (String) params.get("hiredate");
 			LocalDate currentDate = LocalDate.parse(hiredateString);
 			List<String> weekdaysList = calculateWeekdays(currentDate);
@@ -99,6 +101,7 @@ public class EmployeeController {
 		return map; 
 	}
 
+	// 재직자 리스트 출력
 	@GetMapping(value = "/employee/empflist.do")
 	@ResponseBody
 	public HashMap<String, Object> empflist(@RequestParam String page, HttpSession session) {
@@ -110,7 +113,8 @@ public class EmployeeController {
 
 		return employeeService.flist(page, login_dept);
 	}
-	
+
+	// 퇴사자 리스트 출력
 	@GetMapping(value = "/employee/empslist.do")
 	@ResponseBody
 	public HashMap<String, Object> empslist(@RequestParam String page, HttpSession session) {
@@ -122,7 +126,7 @@ public class EmployeeController {
 		return employeeService.slist(page);
 	}
 
-
+	// 직원 상세보기 페이지 이동동
 	 @GetMapping(value = "/employee/empdetail") 
 	 public ModelAndView empdetail(@RequestParam String emp_id) {
 		 
@@ -182,7 +186,8 @@ public class EmployeeController {
 		 
 		 return employeeService.pupdate(params);
 	 }
-	 
+
+	// 비밀번호 5회 이상 틀렸을 시 아이디 잠기는거 풀어주기
 	 @GetMapping(value="/employee/chkClear.do")
 	 public ModelAndView chkClear(@RequestParam String emp_id) {
 		 
@@ -196,7 +201,8 @@ public class EmployeeController {
 		 
 		 return mav;
 	 }
-	 
+
+	// 당일로부터 한달이후 까지의 평일 계산
 	 private List<String> calculateWeekdays(LocalDate startDate) {
 	     List<String> weekdaysList = new ArrayList<>();
 
@@ -214,7 +220,7 @@ public class EmployeeController {
 	     return weekdaysList;
 	 }
 	 
-	 
+	 // 비밀번호 틀린 횟수 확인
 	 @GetMapping(value="/employee/idChk.do")
 	 @ResponseBody
 	 public HashMap<String, Object> idChk(@RequestParam String emp_id){
