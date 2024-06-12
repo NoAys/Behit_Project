@@ -37,7 +37,7 @@ public class WorkController {
 		return "/employee/workHour_list";
 	}
 	
-	// 내 근태관리 시작 리스트
+    // 내 근태관리 시작 리스트
     @GetMapping(value="/myHr/mhr_timeline.go")
     @ResponseBody
     public ModelAndView timeNowList(HttpSession session){
