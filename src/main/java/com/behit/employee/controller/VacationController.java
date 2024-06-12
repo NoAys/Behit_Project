@@ -45,7 +45,7 @@ public class VacationController {
 		return vacationService.vacalist(page, login_dept);
 	}
 
-	// 연차 디테일 페이지로 이동동
+	// 연차 디테일 페이지로 이동
 	@GetMapping(value="/employee/vacadetail")
 	public ModelAndView vacadetail(@RequestParam String emp_id) {
 		return vacationService.detail(emp_id);
